@@ -1,60 +1,44 @@
-import React, { useState } from 'react';
-import './App.css';
-
-const items = [
-  {
-    image: "https://images.pexels.com/photos/1234035/pexels-photo-1234035.jpeg?auto=compress&cs=tinysrgb&w=600",
-    text: "I am Card 1",
-  },
-  {
-    image: "https://images.pexels.com/photos/629162/pexels-photo-629162.jpeg?auto=compress&cs=tinysrgb&w=600",
-    text: "I am Card 2",
-  },
-  {
-    image: "https://images.pexels.com/photos/534164/pexels-photo-534164.jpeg?auto=compress&cs=tinysrgb&w=600",
-    text: "I am Card 3",
-  },
-  {
-    image: "https://images.pexels.com/photos/234272/pexels-photo-234272.jpeg?auto=compress&cs=tinysrgb&w=600",
-    text: "I am Card 4",
-  }
-];
-
-const Carousel = ({ items }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const goToPrevious = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === 0 ? items.length - 1 : prevIndex - 1));
-  };
-
-  const goToNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === items.length - 1 ? 0 : prevIndex + 1));
-  };
-
-  const carouselStyle = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 'auto',
-    width: '100%',
-    height: 'auto',
-    marginTop: '20px'
-  };
-
-  return (
-    <div className="carousel" style={carouselStyle}>
-      <button onClick={goToPrevious}>Previous</button>
-      <img src={items[currentIndex].image} alt={items[currentIndex].text} />
-      <label>{items[currentIndex].text}</label>
-      <button onClick={goToNext}>Next</button>
-    </div>
-  );
-};
+import React, { useState, useEffect } from 'react';
+import './App.css'; 
 
 function App() {
+  const [angle, setAngle] = useState(0);
+
+  useEffect(() => {
+    const scrollHandler = () => {
+      const scrollY = window.scrollY;
+      const angleIncrement = 0.05; // Adjust the speed of rotation
+      const radius = 200; // Adjust the radius of the circular path
+
+      // Calculate the angle based on scroll position
+      const newAngle = scrollY * angleIncrement;
+
+      setAngle(newAngle);
+    };
+
+    // Add scroll event listener
+    window.addEventListener('scroll', scrollHandler);
+
+    // Clean up
+    return () => window.removeEventListener('scroll', scrollHandler);
+  }, []);
+
+  const divStyle = {
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: `translate(-50%, -50%) rotate(${angle}rad) translate(${200}px)`,
+    width: '50px',
+    height: '50px',
+    backgroundColor: 'blue',
+    borderRadius: '50%',
+  };
+
   return (
-    <div className="App">
-      <Carousel items={items} />
+    <div>
+      <div style={divStyle}></div>
+      {/* Add enough content to allow scrolling */}
+      <div style={{ height: '2000px' }}>Scroll to see the animation</div>
     </div>
   );
 }
