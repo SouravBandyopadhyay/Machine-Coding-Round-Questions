@@ -1,47 +1,60 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
-function App() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+const items = [
+  {
+    image: "https://images.pexels.com/photos/1234035/pexels-photo-1234035.jpeg?auto=compress&cs=tinysrgb&w=600",
+    text: "I am Card 1",
+  },
+  {
+    image: "https://images.pexels.com/photos/629162/pexels-photo-629162.jpeg?auto=compress&cs=tinysrgb&w=600",
+    text: "I am Card 2",
+  },
+  {
+    image: "https://images.pexels.com/photos/534164/pexels-photo-534164.jpeg?auto=compress&cs=tinysrgb&w=600",
+    text: "I am Card 3",
+  },
+  {
+    image: "https://images.pexels.com/photos/234272/pexels-photo-234272.jpeg?auto=compress&cs=tinysrgb&w=600",
+    text: "I am Card 4",
+  }
+];
 
-  const handleDragStart = (e) => {
-    const offsetX = e.clientX - position.x;
-    const offsetY = e.clientY - position.y;
-    const handleDragMove = (e) => {
-      const newX = e.clientX - offsetX;
-      const newY = e.clientY - offsetY;
-      setPosition({ x: newX, y: newY });
-    };
-    const handleDragEnd = () => {
-      document.removeEventListener('mousemove', handleDragMove);
-      document.removeEventListener('mouseup', handleDragEnd);
-    };
-    document.addEventListener('mousemove', handleDragMove);
-    document.addEventListener('mouseup', handleDragEnd);
+const Carousel = ({ items }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const goToPrevious = () => {
+    setCurrentIndex((prevIndex) => (prevIndex === 0 ? items.length - 1 : prevIndex - 1));
+  };
+
+  const goToNext = () => {
+    setCurrentIndex((prevIndex) => (prevIndex === items.length - 1 ? 0 : prevIndex + 1));
+  };
+
+  const carouselStyle = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 'auto',
+    width: '100%',
+    height: 'auto',
+    marginTop: '20px'
   };
 
   return (
-    <div
-      style={{
-        width: '200px',
-        height: '200px',
-        backgroundColor: 'lightblue',
-        position: 'absolute',
-        top: position.y,
-        left: position.x,
-        border: '1px solid black',
-        textAlign: 'center',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        cursor: 'pointer',
-      }}
-      onMouseDown={handleDragStart}
-    >
-      <p style={{ margin: 0 }}>
-        X: {position.x}, Y: {position.y}
-      </p>
-      Drag me!
+    <div className="carousel" style={carouselStyle}>
+      <button onClick={goToPrevious}>Previous</button>
+      <img src={items[currentIndex].image} alt={items[currentIndex].text} />
+      <label>{items[currentIndex].text}</label>
+      <button onClick={goToNext}>Next</button>
+    </div>
+  );
+};
+
+function App() {
+  return (
+    <div className="App">
+      <Carousel items={items} />
     </div>
   );
 }
