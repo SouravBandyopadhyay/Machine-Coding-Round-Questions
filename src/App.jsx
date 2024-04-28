@@ -1,41 +1,29 @@
-import { useEffect, useState } from 'react';
-import './App.css';
+import TrafficLight from "./TrafficLight";
 
-function App() {
-  const [currentColor, setCurrentColor] = useState('red');
+import "./App.css";
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      switch (currentColor) {
-        case 'red':
-          setCurrentColor('green');
-          setTimeout(() => setCurrentColor('yellow'), 3000);
-          break;
-        case 'yellow':
-          setCurrentColor('red');
-          break;
-        case 'green':
-          setCurrentColor('yellow');
-          break;
-        default:
-          setCurrentColor('red');
-          break;
-      }
-    }, 4000);
+const config = {
+  red: {
+    backgroundColor: "red",
+    duration: 4000,
+    next: "green",
+  },
+  yellow: {
+    backgroundColor: "yellow",
+    duration: 500,
+    next: "red",
+  },
+  green: {
+    backgroundColor: "green",
+    duration: 3000,
+    next: "yellow",
+  },
+};
 
-    return () => clearInterval(interval);
-  }, [currentColor]);
-
+export default function App() {
   return (
-    <div className="App">
-      <h1>Traffic Light</h1>
-      <div className="traffic-light-container">
-        <div className={`light red ${currentColor === 'red' ? 'active' : ''}`}></div>
-        <div className={`light yellow ${currentColor === 'yellow' ? 'active' : ''}`}></div>
-        <div className={`light green ${currentColor === 'green' ? 'active' : ''}`}></div>
-      </div>
+    <div className="wrapper">
+      <TrafficLight config={config} />
     </div>
   );
 }
-
-export default App;

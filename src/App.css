@@ -1,46 +1,28 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+body {
   font-family: sans-serif;
 }
 
-.traffic-light-container {
-  border:2px solid red;
-  width: 100px;
-  height: 300px;
-  background-color: #333;
-  border-radius: 10px;
+.wrapper {
+  align-items: center;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  padding: 10px;
-
-  /* TO CENTER THE TRAFFIC LIGHT CONTAINER */
-  max-width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
+  gap: 16px;
+  justify-content: center;
 }
 
-.light {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
+.traffic-light-container {
+  background-color: #000;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 8px;
 }
 
-.red {
-  background-color:red; /* Red */
-}
-
-.yellow {
-  background-color: yellow; /* Yellow */
-}
-
-.green {
-  background-color:green; /* Green */
-}
-
-.active {
-  box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.8);
+.traffic-light {
+  --size: 50px;
+  background-color: #555;
+  border-radius: var(--size);
+  height: var(--size);
+  width: var(--size);
 }
