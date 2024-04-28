@@ -1,47 +1,39 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [currentColor, setCurrentColor] = useState('red');
 
-  const handleDragStart = (e) => {
-    const offsetX = e.clientX - position.x;
-    const offsetY = e.clientY - position.y;
-    const handleDragMove = (e) => {
-      const newX = e.clientX - offsetX;
-      const newY = e.clientY - offsetY;
-      setPosition({ x: newX, y: newY });
-    };
-    const handleDragEnd = () => {
-      document.removeEventListener('mousemove', handleDragMove);
-      document.removeEventListener('mouseup', handleDragEnd);
-    };
-    document.addEventListener('mousemove', handleDragMove);
-    document.addEventListener('mouseup', handleDragEnd);
-  };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      switch (currentColor) {
+        case 'red':
+          setCurrentColor('green');
+          setTimeout(() => setCurrentColor('yellow'), 3000);
+          break;
+        case 'yellow':
+          setCurrentColor('red');
+          break;
+        case 'green':
+          setCurrentColor('yellow');
+          break;
+        default:
+          setCurrentColor('red');
+          break;
+      }
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [currentColor]);
 
   return (
-    <div
-      style={{
-        width: '200px',
-        height: '200px',
-        backgroundColor: 'lightblue',
-        position: 'absolute',
-        top: position.y,
-        left: position.x,
-        border: '1px solid black',
-        textAlign: 'center',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        cursor: 'pointer',
-      }}
-      onMouseDown={handleDragStart}
-    >
-      <p style={{ margin: 0 }}>
-        X: {position.x}, Y: {position.y}
-      </p>
-      Drag me!
+    <div className="App">
+      <h1>Traffic Light</h1>
+      <div className="traffic-light-container">
+        <div className={`light red ${currentColor === 'red' ? 'active' : ''}`}></div>
+        <div className={`light yellow ${currentColor === 'yellow' ? 'active' : ''}`}></div>
+        <div className={`light green ${currentColor === 'green' ? 'active' : ''}`}></div>
+      </div>
     </div>
   );
 }
