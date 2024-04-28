@@ -1,5 +1,4 @@
 import TrafficLight from "./TrafficLight";
-
 import "./App.css";
 
 const config = {
