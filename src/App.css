@@ -3,4 +3,16 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  font-family: sans-serif;
+}
+
+.PhotoComponent {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1em;
+}
+
+.PhotoComponent div {
+  border: 1px solid gray;
+  border-radius: 1em;
 }

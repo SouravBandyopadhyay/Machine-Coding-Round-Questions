@@ -1,49 +1,70 @@
-import { useState } from 'react';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
 
+const baseURL = `https://jsonplaceholder.typicode.com/photos`;
+//Paginated_URL https://jsonplaceholder.typicode.com/photos?_page=1&_limit=10
+const LIMIT = 10;
 function App() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [state, setState] = useState([]); // For Posts
+  const [page, setPage] = useState(1); 
+  const [value, setValue] = useState(null);
 
-  const handleDragStart = (e) => {
-    const offsetX = e.clientX - position.x;
-    const offsetY = e.clientY - position.y;
-    const handleDragMove = (e) => {
-      const newX = e.clientX - offsetX;
-      const newY = e.clientY - offsetY;
-      setPosition({ x: newX, y: newY });
-    };
-    const handleDragEnd = () => {
-      document.removeEventListener('mousemove', handleDragMove);
-      document.removeEventListener('mouseup', handleDragEnd);
-    };
-    document.addEventListener('mousemove', handleDragMove);
-    document.addEventListener('mouseup', handleDragEnd);
+  const fetchData = async (page, LIMIT, value) => {
+    let url = `${baseURL}?_page=${page}&_limit=${LIMIT}`;
+    if (value) {
+      url += `&q=${value}`;
+    }
+    const response = await fetch(url);
+    const data = await response.json();
+    // console.log(data);
+    setState(data);
   };
-
+  useEffect(() => {
+    fetchData(page, LIMIT, value);
+  }, [page, value]);
   return (
-    <div
-      style={{
-        width: '200px',
-        height: '200px',
-        backgroundColor: 'lightblue',
-        position: 'absolute',
-        top: position.y,
-        left: position.x,
-        border: '1px solid black',
-        textAlign: 'center',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        cursor: 'pointer',
-      }}
-      onMouseDown={handleDragStart}
-    >
-      <p style={{ margin: 0 }}>
-        X: {position.x}, Y: {position.y}
-      </p>
-      Drag me!
+    <div className="App">
+      <h1>Search With Pagination</h1>
+      {/* Search Bar Component */}
+      <div>
+        <input
+          type="text"
+          name="search"
+          id="search"
+          onChange={(e) => setValue(e.target.value)}
+          value={value}
+          placeholder="Search Photos"
+        />
+      </div>
+      {/* Pagination Component */}
+      <div>
+        <label htmlFor="page">Pagination</label>
+        <select name="page" id="page" onChange={(e) => setPage(e.target.value)}>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
+      </div>
+
+      {/* UI Component */}
+      <div className="PhotoComponent">
+      {state.map((el) => (
+        <PhotosComponent key={el.key} {...el} />
+      ))}
+      </div>
     </div>
   );
 }
+
+const PhotosComponent = ({ id, title, url, thumbnailUrl }) => {
+  return (
+    <div key={id} className="">
+      <p>Title:{title}</p>
+      <p>URL:{url}</p>
+      <img src={thumbnailUrl} alt={title} />
+    </div>
+  );
+};
 
 export default App;
