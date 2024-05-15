@@ -1,2 +1,13 @@
 ## PROBLEM STATEMENT
-Without using any external libraries, draw a container and implement a basic drag and drop functionality. Container should be droppable anywhere on the page, and the x and y coordinates of its position should be printed on the container itself.
+Title: React Editable Todo List
+
+Description:
+Create a todo list application using React with the following features:
+
+1. Add Todos: Users can input todos and add them to the list by pressing "Enter".
+
+2. Complete Todos: Clicking on a todo marks it as complete, displaying a strikethrough.
+
+3. Edit Todos: Double-clicking on a todo allows users to edit its text.
+
+4. Delete Todos: Each todo has a delete option for removal from the list.
