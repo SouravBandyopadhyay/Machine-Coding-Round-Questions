@@ -1,94 +1,61 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
 
-const TodoItem = ({
-  name,
-  completed,
-  id,
-  updatedCompleted,
-  deleteTodo,
-  updateTodo,
-}) => {
-  const [edit, setEdit] = useState(false);
-  const [editText, setEditText] = useState(name);
-
-  return (
-    <div className={`todoItem ${completed ? "completed" : ""}`}>
-      <div className="checkbox" onClick={() => updatedCompleted(id)}>
-        {completed ? <span>&#10003;</span> : ""}
-      </div>
-      <div className="text">
-        {edit ? (
-          <input
-            type="text"
-            value={editText}
-            onChange={(e) => setEditText(e.target.value)}
-            onBlur={() => {
-              setEdit(false);
-              updateTodo(id, editText);
-            }}
-          />
-        ) : (
-          <div onClick={() => setEdit(true)}>{name}</div>
-        )}
-      </div>
-      <div className="delete" onClick={() => deleteTodo(id)}>
-        X
-      </div>
-    </div>
-  );
-};
-
 function App() {
-  const [todos, setTodos] = useState([{ name: "Hello", completed: false, id: 1 }]);
-  const inputRef = useRef();
+  const [todos, setTodos] = useState([]);
+  const [inputText, setInputText] = useState("");
 
-  const addTodo = (event) => {
-    if (event.key === "Enter") {
-      const newTodo = {
-        name: event.target.value.trim(),
-        id: Date.now(),
-        completed: false,
-      };
-      setTodos((prevTodos) => [...prevTodos, newTodo]);
-      event.target.value = "";
+  const handleAddTodo = () => {
+    if (inputText.trim() !== "") {
+      setTodos([...todos, { id: Date.now(), text: inputText, completed: false }]);
+      setInputText("");
     }
   };
 
-  const toggleCompleted = (id) => {
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
+  const handleToggleComplete = (id) => {
+    setTodos(todos.map((todo) => 
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    ));
   };
 
-  const deleteTodo = (id) => {
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+  const handleEditTodo = (id, newText) => {
+    setTodos(todos.map((todo) => 
+      todo.id === id ? { ...todo, text: newText } : todo
+    ));
   };
 
-  const updateTodo = (id, newText) => {
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) => (todo.id === id ? { ...todo, name: newText } : todo))
-    );
+  const handleDeleteTodo = (id) => {
+    setTodos(todos.filter((todo) => todo.id !== id));
   };
 
   return (
-    <div className="App">
+    <div className="todo-list">
       <input
         type="text"
-        placeholder="Add Todo"
-        ref={inputRef}
-        onKeyDown={addTodo}
+        value={inputText}
+        onChange={(e) => setInputText(e.target.value)}
+        placeholder="Add todo..."
+        onKeyDown={(e) => {
+          if (e.key === "Enter") handleAddTodo();
+        }}
       />
       {todos.map((todo) => (
-        <TodoItem
-          key={todo.id}
-          {...todo}
-          updatedCompleted={toggleCompleted}
-          deleteTodo={deleteTodo}
-          updateTodo={updateTodo}
-        />
+        <div key={todo.id} className={`todo-item ${todo.completed ? "completed" : ""}`}>
+          <input
+            type="checkbox"
+            checked={todo.completed}
+            onChange={() => handleToggleComplete(todo.id)}
+          />
+          <div
+            className="todo-text"
+            contentEditable={!todo.completed}
+            suppressContentEditableWarning={true}
+            onBlur={(e) => handleEditTodo(todo.id, e.target.innerText)}
+          >
+            {todo.text}
+          </div>
+          <button onClick={() => handleDeleteTodo(todo.id)}>Delete</button>
+        </div>
       ))}
     </div>
   );

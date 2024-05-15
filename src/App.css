@@ -4,3 +4,32 @@
   padding: 2rem;
   text-align: center;
 }
+
+.todo-list {
+  margin: 20px auto;
+  width: 300px;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.todo-item.completed .todo-text {
+  text-decoration: line-through;
+}
+
+.todo-text {
+  flex-grow: 1;
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+button {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 3px 8px;
+  cursor: pointer;
+}
