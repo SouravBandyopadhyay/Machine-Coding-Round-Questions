@@ -1,2 +1,5 @@
 ## PROBLEM STATEMENT
-Without using any external libraries, draw a container and implement a basic drag and drop functionality. Container should be droppable anywhere on the page, and the x and y coordinates of its position should be printed on the container itself.
+
+Implement an useCopy() hook in React that copies the given text to the clipboard.
+
+### LINK - https://learnersbucket.com/examples/interview/usecopy-hook-in-react/
