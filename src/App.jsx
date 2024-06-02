@@ -1,48 +1,35 @@
-import { useState } from 'react';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import Timer from "./Timer";
 
 function App() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [timer, setTimer] = useState([]);
 
-  const handleDragStart = (e) => {
-    const offsetX = e.clientX - position.x;
-    const offsetY = e.clientY - position.y;
-    const handleDragMove = (e) => {
-      const newX = e.clientX - offsetX;
-      const newY = e.clientY - offsetY;
-      setPosition({ x: newX, y: newY });
-    };
-    const handleDragEnd = () => {
-      document.removeEventListener('mousemove', handleDragMove);
-      document.removeEventListener('mouseup', handleDragEnd);
-    };
-    document.addEventListener('mousemove', handleDragMove);
-    document.addEventListener('mouseup', handleDragEnd);
+  const handleCreateTimer = () => {
+    const id = new Date().getTime();
+    setTimer((prev) => [...prev, { id }]);
   };
 
+  const handleDeleteTimer = (timerId) => {
+    setTimer((prev) => prev.filter((el) => el.id !== timerId));
+  };
   return (
-    <div
-      style={{
-        width: '200px',
-        height: '200px',
-        backgroundColor: 'lightblue',
-        position: 'absolute',
-        top: position.y,
-        left: position.x,
-        border: '1px solid black',
-        textAlign: 'center',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        cursor: 'pointer',
-      }}
-      onMouseDown={handleDragStart}
-    >
-      <p style={{ margin: 0 }}>
-        X: {position.x}, Y: {position.y}
-      </p>
-      Drag me!
-    </div>
+    <>
+      <p>Timer Component</p>
+      <button type="click" onClick={handleCreateTimer}>
+        Create Timer
+      </button>
+      <hr />
+      {timer.map((el) => (
+        <div key={el.id}>
+          <Timer/>
+          <p>{el.id}</p>
+          <button type="click" onClick={() => handleDeleteTimer(el.id)}>
+            Delete Timer
+          </button>
+        </div>
+      ))}
+    </>
   );
 }
 

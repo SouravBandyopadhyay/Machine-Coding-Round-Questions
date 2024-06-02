@@ -1,2 +1,5 @@
 ## PROBLEM STATEMENT
-Without using any external libraries, draw a container and implement a basic drag and drop functionality. Container should be droppable anywhere on the page, and the x and y coordinates of its position should be printed on the container itself.
+
+### Timer Component with Scalability
+
+Create a timer component with pause, resume, lap, and reset functionalities. Display lap values below the timer for easy tracking. Additionally, implement features to dynamically create and delete timers, ensuring scalability.
